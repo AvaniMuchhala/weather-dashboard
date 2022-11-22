@@ -108,7 +108,7 @@ function getWeatherData(event) {
                 .then(function (futureData) {
                     console.log(futureData);
                     var forecastHeader = document.querySelector("#forecast-header");
-                    forecastHeader.textContent = "5-day Forecast:";
+                    forecastHeader.textContent = "5-Day Forecast:";
 
                     // Loop through arrray with weather conditions for 3-hr intervals for next 5 days
                     var hourlyArr = futureData.list;
@@ -122,10 +122,12 @@ function getWeatherData(event) {
                             var dayCard = document.querySelector("#day-" + day);
                             // Clear out content of each dayCard before adding new content
                             dayCard.textContent = "";
+                            dayCard.setAttribute("style","height: 15rem; margin: 0 15px 0 15px; padding: 6px; background-color: #231336; color: white; line-height: 2rem");
 
                             // Append date header to each day card
                             var dateHeader = document.createElement("h3");
                             dateHeader.textContent = dayjs(date).format("M/D/YYYY");
+                            dateHeader.setAttribute("class","fs-4 fw-bold mb-0");
                             dayCard.appendChild(dateHeader);
 
                             // Display weather icon on each day card
