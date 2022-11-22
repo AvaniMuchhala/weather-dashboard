@@ -1,27 +1,48 @@
 var APIKey = "d824f67db78129ee90e5a459c29110be";
+// Get current date and time
 var today = dayjs();
+// Select elements from HTML
 var form = document.querySelector("form");
 var cityInput = document.querySelector("#city");
 var main = document.querySelector("main");
-var cityHeader = document.querySelector("#city-name");
-var weatherIcon = document.querySelector("#icon");
-var currentStats = document.querySelector("#current-stats");
-var forecastHeader = document.querySelector("#forecast-header");
+var cityList = document.querySelector("#city-list");
 
-// Add event listener to Search button
-// Prevent default
-// Store city in local storage
-// First fetch data on long & lat
-// Fetch current weather data for those coordinates
-// Display
+// Get all cities searched by user using local storage
+var citiesSearched = JSON.parse(localStorage.getItem("cities"));
+if (citiesSearched === null) {
+    citiesSearched = [];
+}
+
+// Render array of cities as buttons in the aside
+function renderCityButtons() {
+    cityList.textContent = "";
+    for (var i = 0; i < citiesSearched.length; i++){
+        var cityButton = document.createElement("button");
+        cityButton.textContent = citiesSearched[i];
+        cityList.appendChild(cityButton);
+    }
+}
+
+// Store array of cities in local storage
+function storeCities(cityName) {
+    if (!citiesSearched.includes(cityName)) {
+        citiesSearched.push(cityName);
+    }
+    localStorage.setItem("cities", JSON.stringify(citiesSearched));
+}
 
 function getWeatherData(event) {
-    // Check this
+    // Prevent default of form submission
     event.preventDefault();
 
     var cityName = cityInput.value;
-    var requestUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&appid=" + APIKey;
 
+    // Store searched city in local storage
+    storeCities(cityName);
+    renderCityButtons();
+
+    // First fetch for lat and lon coordinates given city name
+    var requestUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&appid=" + APIKey;
     fetch(requestUrl)
         .then(function (response) {
             return response.json();
@@ -29,14 +50,14 @@ function getWeatherData(event) {
         .then(function (data) {
             console.log(data);
 
-            // Get latitude and longitude
+            // Get latitude and longitude of city
             var lat = data[0].lat;
             var lon = data[0].lon;
             console.log("Lat: " + lat + " Lon: " + lon);
 
-            // Fetch current weather data for those lat and lon coordinates
-            requestUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
-
+            // Second fetch for CURRENT weather data for those lat and lon coordinates
+            // Added query parameter "units=imperial" to get Fahrenheit and MPH
+            requestUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey + "&units=imperial";
             fetch(requestUrl)
                 .then(function (response) {
                     return response.json();
@@ -44,116 +65,84 @@ function getWeatherData(event) {
                 .then(function (currentData) {
                     console.log(currentData);
                     console.log(data[0].name + ", " + data[0].state);
+                    // Apply black border around current weather section
                     currentWeatherSection = document.querySelector("#current-weather");
                     currentWeatherSection.setAttribute("style", "border: 2px solid black");
 
-
+                    // Display city, state, and today's date in header
+                    var cityHeader = document.querySelector("#city-name");
                     cityHeader.textContent = data[0].name + ", " + data[0].state + today.format(' (M/D/YYYY)');
 
-                    // Display weather icon
+                    // Display current weather icon
                     console.log(currentData.weather[0].icon);
+                    var weatherIcon = document.querySelector("#icon");
                     weatherIcon.setAttribute("src","http://openweathermap.org/img/wn/" + currentData.weather[0].icon + "@2x.png");
                     
-                    // Display current weather stats (CHECK METRICS)
+                    // Display current weather stats (temp, wind, humidity)
                     var temp = document.querySelector("#current-temp");
-                    temp.textContent = "Temp: " + currentData.main.temp;
-                    currentStats.appendChild(temp);
-
+                    temp.textContent = "Temp: " + currentData.main.temp + "\u00B0F";   // unicode char to print degrees symbol                
                     var wind = document.querySelector("#current-wind");
                     wind.textContent = "Wind: " + currentData.wind.speed + " MPH";
-                    currentStats.appendChild(wind);
-
                     var humidity = document.querySelector("#current-humidity");
                     humidity.textContent = "Humidity: " + currentData.main.humidity + " %";
-                    currentStats.appendChild(humidity);
-
-
-
-
-
                 });
 
-            requestUrl = "http://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
+            // Third fetch for FUTURE weather data for those lat and lon coordinates
+            requestUrl = "http://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey + "&units=imperial";
             fetch(requestUrl)
                 .then(function (response) {
                     return response.json();
                 })
                 .then(function (futureData) {
                     console.log(futureData);
+                    var forecastHeader = document.querySelector("#forecast-header");
+                    forecastHeader.textContent = "5-day Forecast:";
 
-                    // for loop thru 5 sections
-                    // get current time (round to closest 3-hour interval)
-                    // loop through data array and for each date grab weather conditions from that same 3 hour interval
-                    // attach header, icon, stats for each card
-
-                    forecastHeader.textContent = "5-day Forecast: ";
-                    // FIGURE OUT HOW TO ROUND HOUR
-                    var currentHour = Number(today.format('H'));
-                    var currentMinutes = Number(today.format('m'));
-                    console.log("currentHour: " + currentHour + " currentMinutes: " + currentMinutes);
-                    console.log(typeof currentHour);
-                    if (currentHour % 3 === 1) {
-                        // check minutes
-                        if (currentMinutes < 30) {
-                            // round down
-                            currentHour--;
-                        } else if (currentMinutes >= 30) {
-                            // round up
-                            currentHour = currentHour + 2;
-                        }
-                    } else if (currentHour % 3 === 2) {
-                        // round up
-                        currentHour++;
-                    }
-                    
-                    if (currentHour < 10) {
-                        currentHour = "0" + currentHour + ":00:00";
-                    } else {
-                        currentHour = currentHour + ":00:00";
-                    }
-                    console.log("Current hour in 3-hr interval is: " + currentHour);
-
-                    // Display 5-day forecast
+                    // Loop through arrray with weather conditions for 3-hr intervals for next 5 days
                     var hourlyArr = futureData.list;
                     var day = 1;
                     for (var i = 0; i < hourlyArr.length; i++) {
                         var date = hourlyArr[i].dt_txt.split(" ")[0];
                         var time = hourlyArr[i].dt_txt.split(" ")[1];
 
-                        if (currentHour === time) {
-                            console.log("true: " + currentHour + " = " + time);
-                            console.log(dayjs(date).format("M/D/YYYY"));
-                            var dayCard = document.querySelector("#day-" + (day));
+                        // Check if the time for given date is 3:00PM to get representative weather at this time of day
+                        if (time === "15:00:00") {    
+                            var dayCard = document.querySelector("#day-" + day);
+                            // Clear out content of each dayCard before adding new content
+                            dayCard.textContent = "";
+
+                            // Append date header to each day card
                             var dateHeader = document.createElement("h3");
                             dateHeader.textContent = dayjs(date).format("M/D/YYYY");
                             dayCard.appendChild(dateHeader);
 
-                            // Display weather icon
+                            // Display weather icon on each day card
                             console.log(futureData.list[i].weather[0].icon);
                             var futureWeatherIcon = document.createElement("img");
                             futureWeatherIcon.setAttribute("src", "http://openweathermap.org/img/wn/" + futureData.list[i].weather[0].icon + ".png");
                             dayCard.appendChild(futureWeatherIcon);
 
+                            // Display future weather stats (temp, wind, humidity)
                             var temp = document.createElement("p");
-                            temp.textContent = "Temp: " + futureData.list[i].main.temp;
+                            temp.textContent = "Temp: " + futureData.list[i].main.temp + "\u00B0F";
                             dayCard.appendChild(temp);
-
                             var wind = document.createElement("p");
-                            wind.textContent = "Wind: " + futureData.list[i].wind.speed;
+                            wind.textContent = "Wind: " + futureData.list[i].wind.speed + " MPH";
                             dayCard.appendChild(wind);
-                            
                             var humidity = document.createElement("p");
-                            humidity.textContent = "Humidity: " + futureData.list[i].main.humidity;
+                            humidity.textContent = "Humidity: " + futureData.list[i].main.humidity + " %";
                             dayCard.appendChild(humidity);
 
+                            // Increment day by 1 to add weather data to next dayCard
                             day++;
                         }
                     }
-
 
                 });
         });
 }
 
+renderCityButtons();
+// Once user clicks on "Search" button, call getWeatherData()
 form.addEventListener("submit", getWeatherData);
 
