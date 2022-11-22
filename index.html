@@ -24,7 +24,7 @@
         <aside class="col-3">
             <!-- <h2>Search for a City:</h2> -->
             <form class="container d-flex flex-column">
-                <label for="city" class="my-2 fs-2 fw-bold">Search for a City:</label>
+                <label for="city" class="my-3 fs-2 fw-bold">Search for a City:</label>
                 <!-- include name attribute? -->
                 <input type="text" id="city" value="New York" class="form-control-lg text-muted"><br>       
                 <input type="submit" value="Search" class="p-2 fs-5 bg-primary rounded border-0" style="--bs-bg-opacity: .5;">
@@ -36,14 +36,14 @@
         </aside>
 
         <main class="col-9">
-            <section id="current-weather">
-                <h2 id="city-name"></h2>
+            <section id="current-weather" class="p-2 mt-4 col-10">
+                <h2 id="city-name" class="fs-2 fw-bold"></h2>
                 <img id="icon"/>
                 
-                <ul id="current-stats">
-                    <li id="current-temp"></li>
-                    <li id="current-wind"></li>
-                    <li id="current-humidity"></li>
+                <ul id="current-stats" class="ps-0">
+                    <li id="current-temp" class="my-4 fs-5"></li>
+                    <li id="current-wind" class="my-4 fs-5"></li>
+                    <li id="current-humidity" class="fs-5"></li>
                 </ul>
             </section>
 

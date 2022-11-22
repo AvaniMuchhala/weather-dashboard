@@ -79,7 +79,7 @@ function getWeatherData(event) {
                     console.log(data[0].name + ", " + data[0].state);
                     // Apply black border around current weather section
                     currentWeatherSection = document.querySelector("#current-weather");
-                    currentWeatherSection.setAttribute("style", "border: 2px solid black");
+                    currentWeatherSection.setAttribute("style", "border: 1px solid black");
 
                     // Display city, state, and today's date in header
                     var cityHeader = document.querySelector("#city-name");
