@@ -19,7 +19,7 @@ function renderCityButtons() {
     for (var i = 0; i < citiesSearched.length; i++){
         var cityButton = document.createElement("button");
         cityButton.textContent = citiesSearched[i];
-        cityButton.setAttribute("class","city-button")
+        cityButton.setAttribute("class","city-button p-2 m-2 rounded fs-5 border-0 bg-secondary bg-opacity-50");
         cityList.appendChild(cityButton);
     }
 }
@@ -42,7 +42,7 @@ function getWeatherData(event) {
         console.log(event.target.className);
         // Since all buttons created have class name of "city-button", 
         // check whether user actually clicked on button or on white space within the section
-        if (event.target.className !== "city-button") {
+        if (!event.target.className.includes("city-button")) {
             return;
         }
         var cityName = event.target.textContent;    // cityName = city on the button

@@ -23,16 +23,16 @@
     
         <aside class="col-3">
             <!-- <h2>Search for a City:</h2> -->
-            <form class="container">
-                <label for="city">Search for a City:</label><br>
+            <form class="container d-flex flex-column">
+                <label for="city" class="my-2 fs-2 fw-bold">Search for a City:</label>
                 <!-- include name attribute? -->
-                <input type="text" id="city" value="New York" class="form-control-lg"><br>       
-                <input type="submit" value="Search">
+                <input type="text" id="city" value="New York" class="form-control-lg text-muted"><br>       
+                <input type="submit" value="Search" class="p-2 fs-5 bg-primary rounded border-0" style="--bs-bg-opacity: .5;">
             </form>
-            <hr>
+            <hr class="m-2">
 
             <!-- Store searched cities in this section -->
-            <section id="city-list"></section>
+            <section id="city-list" class="d-flex flex-column"></section>
         </aside>
 
         <main class="col-9">
