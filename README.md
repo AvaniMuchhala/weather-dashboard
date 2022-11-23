@@ -6,7 +6,7 @@ This application is a weather dashboard that displays the current weather and th
 
 ## Usage
 
-Click on the website URL: 
+Click on the website URL: https://avanimuchhala.github.io/weather-dashboard/
 
 Once on the website, type in a city in the input textbox and click on "Search". To the right, the top section shows the current weather conditions (temperature, wind, humidity) for the searched city. The bottom section shows the 5-day forecast for the city. You can also click on any of the saved city buttons from previous searches on your browser in the search history to generate the weather outlook for that city.
 
