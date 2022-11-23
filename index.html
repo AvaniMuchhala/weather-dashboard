@@ -18,7 +18,7 @@
         <h1 class="fw-bolder">Weather Dashboard</h1>
     </header>
 
-    <section class="row">
+    <section class="dashboard row">
 
     
         <aside class="col-3">
@@ -26,7 +26,7 @@
             <form class="container d-flex flex-column">
                 <label for="city" class="my-3 fs-2 fw-bold">Search for a City:</label>
                 <!-- include name attribute? -->
-                <input type="text" id="city" value="New York" class="form-control-lg text-muted"><br>       
+                <input type="text" id="city" value="New York" class="form-control-lg text-muted" onfocus="this.value=''"><br>       
                 <input type="submit" value="Search" class="p-2 fs-5 bg-primary rounded border-0" style="--bs-bg-opacity: .5;">
             </form>
             <hr class="m-2">

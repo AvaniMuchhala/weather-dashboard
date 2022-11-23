@@ -1,6 +1,7 @@
 var APIKey = "d824f67db78129ee90e5a459c29110be";
 // Get current date and time
 var today = dayjs();
+var currentDate = today.format('YYYY-MM-DD');
 // Select elements from HTML
 var form = document.querySelector("form");
 var cityInput = document.querySelector("#city");
@@ -37,7 +38,7 @@ function getWeatherData(event) {
     // Check whether event.type is submit (user clicked "Search") or click (user clicked on city button)
     if (event.type === "submit") {
         event.preventDefault();
-        var cityName = cityInput.value;     // cityName = user input
+        var cityName = cityInput.value.trim();     // cityName = user input
     } else if (event.type === "click") {
         console.log(event.target.className);
         // Since all buttons created have class name of "city-button", 
@@ -110,7 +111,7 @@ function getWeatherData(event) {
                     var forecastHeader = document.querySelector("#forecast-header");
                     forecastHeader.textContent = "5-Day Forecast:";
 
-                    // Loop through arrray with weather conditions for 3-hr intervals for next 5 days
+                    // Loop through array with weather conditions for 3-hr intervals for next 5 days
                     var hourlyArr = futureData.list;
                     var day = 1;
                     for (var i = 0; i < hourlyArr.length; i++) {
@@ -118,7 +119,8 @@ function getWeatherData(event) {
                         var time = hourlyArr[i].dt_txt.split(" ")[1];
 
                         // Check if the time for given date is 3:00PM to get representative weather at this time of day
-                        if (time === "15:00:00") {    
+                        // Also confirm that this future date does not equal the current date
+                        if (time === "15:00:00" && date !== currentDate) {    
                             var dayCard = document.querySelector("#day-" + day);
                             // Clear out content of each dayCard before adding new content
                             dayCard.textContent = "";

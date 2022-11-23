@@ -19,15 +19,13 @@ header h1 {
     border: 1px solid gray;
 }
 
-/* .day-card {
-    height: 15rem;
-    background-color: #231336;
-    color: white;
-    margin: 0 15px 0 15px;
-    padding: 6px;
-    line-height: 2rem;
-} */
 
 p {
     font-size: 20px;
 }
+
+/* @media screen and (max-width: 768px) {
+    .dashboard {
+      flex-direction: column;
+    }
+  } */
