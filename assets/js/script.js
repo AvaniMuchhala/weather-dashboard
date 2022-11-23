@@ -48,7 +48,7 @@ function getWeatherData(event) {
     }
 
     // First fetch for lat and lon coordinates given city name
-    var requestUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&appid=" + APIKey;
+    var requestUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&appid=" + APIKey;
     fetch(requestUrl)
         .then(function (response) {
             return response.json();
