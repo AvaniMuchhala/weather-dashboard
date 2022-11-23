@@ -98,7 +98,7 @@ function getWeatherData(event) {
                 });
 
             // Third fetch for FUTURE weather data for those lat and lon coordinates
-            requestUrl = "http://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey + "&units=imperial";
+            requestUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey + "&units=imperial";
             fetch(requestUrl)
                 .then(function (response) {
                     return response.json();
