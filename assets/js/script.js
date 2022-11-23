@@ -34,13 +34,11 @@ function storeCities(cityName) {
 }
 
 function getWeatherData(event) {
-    console.log(event.type);
     // Check whether event.type is submit (user clicked "Search") or click (user clicked on city button)
     if (event.type === "submit") {
         event.preventDefault();
         var cityName = cityInput.value.trim();     // cityName = user input
     } else if (event.type === "click") {
-        console.log(event.target.className);
         // Since all buttons created have class name of "city-button", 
         // check whether user actually clicked on button or on white space within the section
         if (!event.target.className.includes("city-button")) {
@@ -48,7 +46,6 @@ function getWeatherData(event) {
         }
         var cityName = event.target.textContent;    // cityName = city on the button
     }
-    console.log(cityName);
 
     // First fetch for lat and lon coordinates given city name
     var requestUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&appid=" + APIKey;
@@ -57,8 +54,6 @@ function getWeatherData(event) {
             return response.json();
         })
         .then(function (data) {
-            console.log(data);
-            
             // Check whether user inputted valid city (data.length is 0 if invalid search)
             if (data.length === 0) {
                 window.alert("Invalid input. Enter the name of a city.");
@@ -72,7 +67,6 @@ function getWeatherData(event) {
             // Get latitude and longitude of city
             var lat = data[0].lat;
             var lon = data[0].lon;
-            console.log("Lat: " + lat + " Lon: " + lon);
 
             // Second fetch for CURRENT weather data for those lat and lon coordinates
             // Added query parameter "units=imperial" to get Fahrenheit and MPH
@@ -82,8 +76,6 @@ function getWeatherData(event) {
                     return response.json();
                 })
                 .then(function (currentData) {
-                    console.log(currentData);
-                    console.log(data[0].name + ", " + data[0].state);
                     // Apply black border around current weather section
                     currentWeatherSection = document.querySelector("#current-weather");
                     currentWeatherSection.setAttribute("style", "border: 1px solid black");
@@ -93,7 +85,6 @@ function getWeatherData(event) {
                     cityHeader.textContent = data[0].name + ", " + data[0].state + today.format(' (M/D/YYYY)');
 
                     // Display current weather icon
-                    console.log(currentData.weather[0].icon);
                     var weatherIcon = document.querySelector("#icon");
                     weatherIcon.setAttribute("src", "http://openweathermap.org/img/wn/" + currentData.weather[0].icon + "@2x.png");
 
@@ -113,7 +104,6 @@ function getWeatherData(event) {
                     return response.json();
                 })
                 .then(function (futureData) {
-                    console.log(futureData);
                     var forecastHeader = document.querySelector("#forecast-header");
                     forecastHeader.textContent = "5-Day Forecast:";
 
@@ -139,7 +129,6 @@ function getWeatherData(event) {
                             dayCard.appendChild(dateHeader);
 
                             // Display weather icon on each day card
-                            console.log(futureData.list[i].weather[0].icon);
                             var futureWeatherIcon = document.createElement("img");
                             futureWeatherIcon.setAttribute("src", "http://openweathermap.org/img/wn/" + futureData.list[i].weather[0].icon + ".png");
                             dayCard.appendChild(futureWeatherIcon);

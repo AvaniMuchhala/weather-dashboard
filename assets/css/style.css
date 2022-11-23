@@ -2,6 +2,7 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Format header - background color & text centering */
 header {
     height: 5rem;
     background: linear-gradient(90deg, #4c4caf, #2f1a49);
@@ -10,22 +11,17 @@ header {
     align-items: center;
 }
 
+/* Format "Weather Dashboard" heading */
 header h1 {
     color: white;
     font-size: 2.5rem;   
 }
 
+/* Border around the input textbox */
 #city {
     border: 1px solid gray;
 }
 
-
 p {
     font-size: 20px;
 }
-
-/* @media screen and (max-width: 768px) {
-    .dashboard {
-      flex-direction: column;
-    }
-  } */
