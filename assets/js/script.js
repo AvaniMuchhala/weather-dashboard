@@ -17,10 +17,10 @@ if (citiesSearched === null) {
 // Render array of cities as buttons in the aside
 function renderCityButtons() {
     cityList.textContent = "";
-    for (var i = 0; i < citiesSearched.length; i++){
+    for (var i = 0; i < citiesSearched.length; i++) {
         var cityButton = document.createElement("button");
         cityButton.textContent = citiesSearched[i];
-        cityButton.setAttribute("class","city-button p-2 m-2 rounded fs-5 border-0 bg-secondary bg-opacity-50");
+        cityButton.setAttribute("class", "city-button p-2 m-2 rounded fs-5 border-0 bg-secondary bg-opacity-50");
         cityList.appendChild(cityButton);
     }
 }
@@ -50,10 +50,6 @@ function getWeatherData(event) {
     }
     console.log(cityName);
 
-    // Store searched city in local storage
-    storeCities(cityName);
-    renderCityButtons();
-
     // First fetch for lat and lon coordinates given city name
     var requestUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&appid=" + APIKey;
     fetch(requestUrl)
@@ -62,6 +58,16 @@ function getWeatherData(event) {
         })
         .then(function (data) {
             console.log(data);
+            
+            // Check whether user inputted valid city (data.length is 0 if invalid search)
+            if (data.length === 0) {
+                window.alert("Invalid input. Enter the name of a city.");
+                return;
+            }
+
+            // Store searched city in local storage
+            storeCities(cityName);
+            renderCityButtons();
 
             // Get latitude and longitude of city
             var lat = data[0].lat;
@@ -89,8 +95,8 @@ function getWeatherData(event) {
                     // Display current weather icon
                     console.log(currentData.weather[0].icon);
                     var weatherIcon = document.querySelector("#icon");
-                    weatherIcon.setAttribute("src","http://openweathermap.org/img/wn/" + currentData.weather[0].icon + "@2x.png");
-                    
+                    weatherIcon.setAttribute("src", "http://openweathermap.org/img/wn/" + currentData.weather[0].icon + "@2x.png");
+
                     // Display current weather stats (temp, wind, humidity)
                     var temp = document.querySelector("#current-temp");
                     temp.textContent = "Temp: " + currentData.main.temp + "\u00B0F";   // unicode char to print degrees symbol                
@@ -120,16 +126,16 @@ function getWeatherData(event) {
 
                         // Check if the time for given date is 3:00PM to get representative weather at this time of day
                         // Also confirm that this future date does not equal the current date
-                        if (time === "15:00:00" && date !== currentDate) {    
+                        if (time === "15:00:00" && date !== currentDate) {
                             var dayCard = document.querySelector("#day-" + day);
                             // Clear out content of each dayCard before adding new content
                             dayCard.textContent = "";
-                            dayCard.setAttribute("style","height: 15rem; margin: 0 15px 0 15px; padding: 6px; background-color: #231336; color: white; line-height: 2rem");
+                            dayCard.setAttribute("style", "height: 15rem; margin: 0 15px 0 15px; padding: 6px; background-color: #231336; color: white; line-height: 2rem");
 
                             // Append date header to each day card
                             var dateHeader = document.createElement("h3");
                             dateHeader.textContent = dayjs(date).format("M/D/YYYY");
-                            dateHeader.setAttribute("class","fs-4 fw-bold mb-0");
+                            dateHeader.setAttribute("class", "fs-4 fw-bold mb-0");
                             dayCard.appendChild(dateHeader);
 
                             // Display weather icon on each day card
@@ -155,7 +161,7 @@ function getWeatherData(event) {
                     }
 
                 });
-        });
+        })
 }
 
 renderCityButtons();
